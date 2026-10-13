@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module fritzingVersion="0.9.10b" moduleId="ESP32_Sensor_Parking_MediaLab">
+  <version>1.0</version>
+  <title>Taller ESP32 Sensor de Parking - MediaLab UniOvi</title>
+  <label>Taller</label>
+  <date>2026-10-13</date>
+  <author>MediaLab UniOvi</author>
+  <description>Esquema de conexiones del taller de sensor de aparcamiento para coche con ESP32, HC-SR04, divisor de tension 5V a 3.3V, pantalla OLED I2C SSD1306 y Buzzer piezoelectrico.</description>
+  <netlist>
+    <!-- RED DE ALIMENTACION 5V -->
+    <net id="NET_5V">
+      <connector id="connector_esp32_vin" name="ESP32 VIN (5V)" />
+      <connector id="connector_hcsr04_vcc" name="HC-SR04 VCC" />
+    </net>
+
+    <!-- RED DE ALIMENTACION 3.3V -->
+    <net id="NET_3V3">
+      <connector id="connector_esp32_3v3" name="ESP32 3V3" />
+      <connector id="connector_oled_vcc" name="OLED VCC" />
+    </net>
+
+    <!-- RED DE MASA COMUN (GND) -->
+    <net id="NET_GND">
+      <connector id="connector_esp32_gnd" name="ESP32 GND" />
+      <connector id="connector_hcsr04_gnd" name="HC-SR04 GND" />
+      <connector id="connector_oled_gnd" name="OLED GND" />
+      <connector id="connector_buzzer_neg" name="Buzzer Cátodo (-)" />
+      <connector id="connector_r2_gnd" name="Resistencia R2 a GND" />
+    </net>
+
+    <!-- SENAL TRIGGER (GPIO 5) -->
+    <net id="NET_TRIG">
+      <connector id="connector_esp32_gpio5" name="ESP32 GPIO 5" />
+      <connector id="connector_hcsr04_trig" name="HC-SR04 TRIG" />
+    </net>
+
+    <!-- SENAL ECHO A DIVISOR RESISTIVO -->
+    <net id="NET_ECHO_RAW">
+      <connector id="connector_hcsr04_echo" name="HC-SR04 ECHO (5V)" />
+      <connector id="connector_r1_in" name="R1 1kΩ Entrada" />
+    </net>
+
+    <!-- NODO SEGURO DEL DIVISOR RESISTIVO A GPIO 18 (3.3V) -->
+    <net id="NET_ECHO_DIVIDED">
+      <connector id="connector_r1_out" name="R1 1kΩ Salida" />
+      <connector id="connector_r2_in" name="R2 2kΩ Entrada" />
+      <connector id="connector_esp32_gpio18" name="ESP32 GPIO 18" />
+    </net>
+
+    <!-- I2C SDA (GPIO 21) -->
+    <net id="NET_I2C_SDA">
+      <connector id="connector_esp32_gpio21" name="ESP32 GPIO 21" />
+      <connector id="connector_oled_sda" name="OLED SDA" />
+    </net>
+
+    <!-- I2C SCL (GPIO 22) -->
+    <net id="NET_I2C_SCL">
+      <connector id="connector_esp32_gpio22" name="ESP32 GPIO 22" />
+      <connector id="connector_oled_scl" name="OLED SCL" />
+    </net>
+
+    <!-- BUZZER CONTROL (GPIO 19) -->
+    <net id="NET_BUZZER_SIGNAL">
+      <connector id="connector_esp32_gpio19" name="ESP32 GPIO 19" />
+      <connector id="connector_buzzer_pos" name="Buzzer Ánodo (+)" />
+    </net>
+  </netlist>
+</module>

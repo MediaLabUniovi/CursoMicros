@@ -63,6 +63,14 @@ Conecta los componentes en la protoboard siguiendo esta asignación de pines:
 > El sensor HC-SR04 emite la señal ECHO a 5V. Las entradas digitales del ESP32 toleran un máximo de 3.3V. El divisor formado por **R1 = 1 kΩ** en serie y **R2 = 2 kΩ** a masa rebaja el voltaje a un nivel seguro:  
 > $$V_{GPIO} = 5\text{V} \times \frac{2\text{k}\Omega}{1\text{k}\Omega + 2\text{k}\Omega} \approx 3.33\text{V}$$
 
+### 🗺️ Esquema Visual de Conexiones
+
+<p align="center">
+  <img src="esquema_conexiones.svg" alt="Esquema de Conexiones ESP32 Sensor de Parking" width="100%" />
+</p>
+
+> 💾 **Archivo para Fritzing:** Puedes descargar y abrir el circuito directamente en Fritzing con el archivo [`CargaCodigo/Esquema_Conexiones.fzz`](CargaCodigo/Esquema_Conexiones.fzz).
+
 ---
 
 ## 💻 Desarrollo y Modificación del Código (PlatformIO + VS Code)
