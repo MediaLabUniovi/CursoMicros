@@ -1,229 +1,405 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="100%" height="100%" style="background-color: #0f172a; font-family: system-ui, -apple-system, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="100%" height="100%" style="background-color: #1e293b; font-family: system-ui, -apple-system, sans-serif;">
   <defs>
-    <!-- Filtros de sombra y brillo -->
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="3" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.5"/>
+    <!-- Sombras estilo Fritzing -->
+    <filter id="fshadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.45"/>
     </filter>
-    <linearGradient id="pcbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b"/>
+    <filter id="wireShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#090d16" flood-opacity="0.5"/>
+    </filter>
+
+    <!-- Gradientes de Componentes -->
+    <linearGradient id="transducerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+
+    <linearGradient id="oledGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
       <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
-    <linearGradient id="goldPin" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#d97706"/>
-    </linearGradient>
-    <linearGradient id="oledGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0284c7"/>
-      <stop offset="100%" stop-color="#0369a1"/>
+
+    <linearGradient id="resistorBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
     </linearGradient>
   </defs>
 
-  <!-- Título y Encabezado -->
-  <rect x="20" y="20" width="960" height="60" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
-  <text x="50" y="55" fill="#38bdf8" font-size="20" font-weight="bold">MediaLab UniOvi • Esquema de Conexiones del Taller</text>
-  <text x="650" y="55" fill="#94a3b8" font-size="14">ESP32 + HC-SR04 + OLED + Buzzer</text>
+  <!-- ============================================================== -->
+  <!-- CABECERA DEL DOCUMENTO                                         -->
+  <!-- ============================================================== -->
+  <rect x="30" y="20" width="1140" height="60" rx="12" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <text x="60" y="56" fill="#38bdf8" font-size="22" font-weight="800">MediaLab UniOvi • Montaje en Protoboard (Vista Fritzing)</text>
+  <text x="820" y="56" fill="#94a3b8" font-size="14">Sensor de Parking ESP32 • Circuito Físico</text>
 
-  <!-- ========================================== -->
-  <!-- 1. PLACA ESP32 (CENTRO IZQUIERDA)          -->
-  <!-- ========================================== -->
-  <g transform="translate(60, 110)" filter="url(#shadow)">
-    <!-- Cuerpo de la placa ESP32 -->
-    <rect x="0" y="0" width="220" height="520" rx="16" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
-    <rect x="50" y="10" width="120" height="150" rx="8" fill="#334155" stroke="#64748b" stroke-width="1.5"/>
-    <text x="110" y="80" fill="#e2e8f0" font-size="14" font-weight="bold" text-anchor="middle">ESP-WROOM-32</text>
-    <text x="110" y="105" fill="#94a3b8" font-size="10" text-anchor="middle">Wi-Fi &amp; Bluetooth</text>
+  <!-- ============================================================== -->
+  <!-- 1. LA PROTOBOARD (BREADBOARD ESTÁNDAR BLANCA)                  -->
+  <!-- ============================================================== -->
+  <g transform="translate(60, 110)" filter="url(#fshadow)">
+    <!-- Cuerpo de la Protoboard -->
+    <rect x="0" y="0" width="1080" height="460" rx="18" fill="#f8fafc" stroke="#cbd5e1" stroke-width="4"/>
 
-    <!-- Conector MicroUSB -->
-    <rect x="75" y="490" width="70" height="35" rx="4" fill="#94a3b8" stroke="#cbd5e1" stroke-width="1"/>
-    <text x="110" y="512" fill="#0f172a" font-size="10" font-weight="bold" text-anchor="middle">USB</text>
+    <!-- Canal Central Aislante -->
+    <rect x="30" y="215" width="1020" height="30" fill="#e2e8f0"/>
+    <line x1="30" y1="230" x2="1050" y2="230" stroke="#cbd5e1" stroke-dasharray="6,6" stroke-width="2"/>
 
-    <!-- Botones BOOT y EN -->
-    <rect x="25" y="470" width="24" height="24" rx="4" fill="#475569"/>
-    <circle cx="37" cy="482" r="6" fill="#cbd5e1"/>
-    <text x="37" y="508" fill="#94a3b8" font-size="9" text-anchor="middle">EN</text>
+    <!-- Carril Superior: Buses de Alimentación (+ y -) -->
+    <!-- Línea Azul GND (-) -->
+    <line x1="50" y1="35" x2="1030" y2="35" stroke="#0284c7" stroke-width="3"/>
+    <text x="35" y="40" fill="#0284c7" font-size="16" font-weight="bold">-</text>
+    <text x="1040" y="40" fill="#0284c7" font-size="16" font-weight="bold">-</text>
 
-    <rect x="171" y="470" width="24" height="24" rx="4" fill="#475569"/>
-    <circle cx="183" cy="482" r="6" fill="#ef4444"/>
-    <text x="183" y="508" fill="#fca5a5" font-size="9" font-weight="bold" text-anchor="middle">BOOT</text>
+    <!-- Línea Roja 5V / VCC (+) -->
+    <line x1="50" y1="65" x2="1030" y2="65" stroke="#ef4444" stroke-width="3"/>
+    <text x="35" y="70" fill="#ef4444" font-size="16" font-weight="bold">+</text>
+    <text x="1040" y="70" fill="#ef4444" font-size="16" font-weight="bold">+</text>
 
-    <!-- PINES DERECHA RELEVANTES -->
+    <!-- Carril Inferior: Buses de Alimentación (+ y -) -->
+    <line x1="50" y1="395" x2="1030" y2="395" stroke="#0284c7" stroke-width="3"/>
+    <text x="35" y="400" fill="#0284c7" font-size="16" font-weight="bold">-</text>
+    <text x="1040" y="400" fill="#0284c7" font-size="16" font-weight="bold">-</text>
+
+    <line x1="50" y1="425" x2="1030" y2="425" stroke="#ef4444" stroke-width="3"/>
+    <text x="35" y="430" fill="#ef4444" font-size="16" font-weight="bold">+</text>
+    <text x="1040" y="430" fill="#ef4444" font-size="16" font-weight="bold">+</text>
+
+    <!-- AGUJEROS DE LA PROTOBOARD (Filas A-E y F-J simuladas) -->
+    <!-- Agujeros de carriles de alimentación -->
+    <g fill="#94a3b8">
+      <!-- Repetición visual de agujeros -->
+      <!-- Carril superior -->
+      <g id="railHoles">
+        <circle cx="80" cy="35" r="3.5"/><circle cx="110" cy="35" r="3.5"/><circle cx="140" cy="35" r="3.5"/><circle cx="170" cy="35" r="3.5"/><circle cx="200" cy="35" r="3.5"/>
+        <circle cx="250" cy="35" r="3.5"/><circle cx="280" cy="35" r="3.5"/><circle cx="310" cy="35" r="3.5"/><circle cx="340" cy="35" r="3.5"/><circle cx="370" cy="35" r="3.5"/>
+        <circle cx="420" cy="35" r="3.5"/><circle cx="450" cy="35" r="3.5"/><circle cx="480" cy="35" r="3.5"/><circle cx="510" cy="35" r="3.5"/><circle cx="540" cy="35" r="3.5"/>
+        <circle cx="590" cy="35" r="3.5"/><circle cx="620" cy="35" r="3.5"/><circle cx="650" cy="35" r="3.5"/><circle cx="680" cy="35" r="3.5"/><circle cx="710" cy="35" r="3.5"/>
+        <circle cx="760" cy="35" r="3.5"/><circle cx="790" cy="35" r="3.5"/><circle cx="820" cy="35" r="3.5"/><circle cx="850" cy="35" r="3.5"/><circle cx="880" cy="35" r="3.5"/>
+        <circle cx="930" cy="35" r="3.5"/><circle cx="960" cy="35" r="3.5"/><circle cx="990" cy="35" r="3.5"/>
+
+        <circle cx="80" cy="65" r="3.5"/><circle cx="110" cy="65" r="3.5"/><circle cx="140" cy="65" r="3.5"/><circle cx="170" cy="65" r="3.5"/><circle cx="200" cy="65" r="3.5"/>
+        <circle cx="250" cy="65" r="3.5"/><circle cx="280" cy="65" r="3.5"/><circle cx="310" cy="65" r="3.5"/><circle cx="340" cy="65" r="3.5"/><circle cx="370" cy="65" r="3.5"/>
+        <circle cx="420" cy="65" r="3.5"/><circle cx="450" cy="65" r="3.5"/><circle cx="480" cy="65" r="3.5"/><circle cx="510" cy="65" r="3.5"/><circle cx="540" cy="65" r="3.5"/>
+        <circle cx="590" cy="65" r="3.5"/><circle cx="620" cy="65" r="3.5"/><circle cx="650" cy="65" r="3.5"/><circle cx="680" cy="65" r="3.5"/><circle cx="710" cy="65" r="3.5"/>
+        <circle cx="760" cy="65" r="3.5"/><circle cx="790" cy="65" r="3.5"/><circle cx="820" cy="65" r="3.5"/><circle cx="850" cy="65" r="3.5"/><circle cx="880" cy="65" r="3.5"/>
+        <circle cx="930" cy="65" r="3.5"/><circle cx="960" cy="65" r="3.5"/><circle cx="990" cy="65" r="3.5"/>
+      </g>
+    </g>
+
+    <!-- Letras y Números de Guía en la Protoboard -->
+    <text x="45" y="105" fill="#94a3b8" font-size="11" font-weight="bold">A</text>
+    <text x="45" y="130" fill="#94a3b8" font-size="11" font-weight="bold">B</text>
+    <text x="45" y="155" fill="#94a3b8" font-size="11" font-weight="bold">C</text>
+    <text x="45" y="180" fill="#94a3b8" font-size="11" font-weight="bold">D</text>
+    <text x="45" y="205" fill="#94a3b8" font-size="11" font-weight="bold">E</text>
+
+    <text x="45" y="270" fill="#94a3b8" font-size="11" font-weight="bold">F</text>
+    <text x="45" y="295" fill="#94a3b8" font-size="11" font-weight="bold">G</text>
+    <text x="45" y="320" fill="#94a3b8" font-size="11" font-weight="bold">H</text>
+    <text x="45" y="345" fill="#94a3b8" font-size="11" font-weight="bold">I</text>
+    <text x="45" y="370" fill="#94a3b8" font-size="11" font-weight="bold">J</text>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 2. PLACA ESP32 INSERTADA A CABALLO SOBRE EL CANAL CENTRAL      -->
+  <!-- ============================================================== -->
+  <g transform="translate(140, 240)" filter="url(#fshadow)">
+    <!-- PCB Negro del ESP32 -->
+    <rect x="0" y="0" width="340" height="200" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+
+    <!-- Módulo Blindado Metálico ESP-WROOM-32 -->
+    <rect x="70" y="25" width="130" height="150" rx="4" fill="#334155" stroke="#94a3b8" stroke-width="1.5"/>
+    <rect x="80" y="35" width="20" height="130" rx="2" fill="#1e293b"/>
+    <text x="145" y="90" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">ESP32</text>
+    <text x="145" y="110" fill="#94a3b8" font-size="9" text-anchor="middle">WROOM</text>
+
+    <!-- Conector MicroUSB en el extremo izquierdo -->
+    <rect x="-18" y="75" width="22" height="50" rx="4" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+    <text x="-7" y="104" fill="#0f172a" font-size="8" font-weight="bold" text-anchor="middle">USB</text>
+
+    <!-- Botón BOOT -->
+    <rect x="15" y="25" width="22" height="22" rx="4" fill="#334155"/>
+    <circle cx="26" cy="36" r="6" fill="#ef4444"/>
+    <text x="26" y="58" fill="#fca5a5" font-size="8" font-weight="bold" text-anchor="middle">BOOT</text>
+
+    <!-- Botón EN (Reset) -->
+    <rect x="15" y="153" width="22" height="22" rx="4" fill="#334155"/>
+    <circle cx="26" cy="164" r="6" fill="#94a3b8"/>
+    <text x="26" y="186" fill="#94a3b8" font-size="8" text-anchor="middle">EN</text>
+
+    <!-- PINES SUPERIORES RELEVANTES (Filas E de la proto) -->
+    <!-- 3.3V (Pin 1 sup) -->
+    <rect x="220" y="-8" width="16" height="12" fill="#fbbf24"/>
+    <text x="228" y="-14" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">3V3</text>
+
+    <!-- GND (Pin 2 sup) -->
+    <rect x="245" y="-8" width="16" height="12" fill="#fbbf24"/>
+    <text x="253" y="-14" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle">GND</text>
+
+    <!-- GPIO 22 SCL -->
+    <rect x="275" y="-8" width="16" height="12" fill="#fbbf24"/>
+    <text x="283" y="-14" fill="#fb923c" font-size="10" font-weight="bold" text-anchor="middle">G22</text>
+
+    <!-- GPIO 21 SDA -->
+    <rect x="305" y="-8" width="16" height="12" fill="#fbbf24"/>
+    <text x="313" y="-14" fill="#4ade80" font-size="10" font-weight="bold" text-anchor="middle">G21</text>
+
+    <!-- PINES INFERIORES RELEVANTES (Filas F de la proto) -->
     <!-- VIN (5V) -->
-    <rect x="195" y="180" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="188" y="192" fill="#f87171" font-size="11" font-weight="bold" text-anchor="end">VIN (5V)</text>
+    <rect x="220" y="196" width="16" height="12" fill="#fbbf24"/>
+    <text x="228" y="222" fill="#ef4444" font-size="10" font-weight="bold" text-anchor="middle">VIN</text>
 
-    <!-- GND (Derecha) -->
-    <rect x="195" y="210" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="188" y="222" fill="#94a3b8" font-size="11" font-weight="bold" text-anchor="end">GND</text>
+    <!-- GND (Inf) -->
+    <rect x="245" y="196" width="16" height="12" fill="#fbbf24"/>
+    <text x="253" y="222" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle">GND</text>
 
-    <!-- GPIO 18 (Echo) -->
-    <rect x="195" y="270" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="188" y="282" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="end">GPIO 18 (ECHO)</text>
+    <!-- GPIO 5 TRIG -->
+    <rect x="275" y="196" width="16" height="12" fill="#fbbf24"/>
+    <text x="283" y="222" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">G5</text>
 
-    <!-- GPIO 5 (Trig) -->
-    <rect x="195" y="300" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="188" y="312" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="end">GPIO 5 (TRIG)</text>
+    <!-- GPIO 18 ECHO -->
+    <rect x="305" y="196" width="16" height="12" fill="#fbbf24"/>
+    <text x="313" y="222" fill="#eab308" font-size="10" font-weight="bold" text-anchor="middle">G18</text>
 
-    <!-- GPIO 19 (Buzzer) -->
-    <rect x="195" y="340" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="188" y="352" fill="#c084fc" font-size="11" font-weight="bold" text-anchor="end">GPIO 19 (BUZZER)</text>
-
-    <!-- GPIO 21 (SDA) -->
-    <rect x="195" y="390" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="188" y="402" fill="#4ade80" font-size="11" font-weight="bold" text-anchor="end">GPIO 21 (SDA)</text>
-
-    <!-- GPIO 22 (SCL) -->
-    <rect x="195" y="420" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="188" y="432" fill="#fb923c" font-size="11" font-weight="bold" text-anchor="end">GPIO 22 (SCL)</text>
-
-    <!-- PINES IZQUIERDA -->
-    <!-- 3.3V -->
-    <rect x="0" y="180" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="32" y="192" fill="#38bdf8" font-size="11" font-weight="bold">3V3</text>
-
-    <!-- GND (Izquierda) -->
-    <rect x="0" y="210" width="25" height="14" rx="2" fill="url(#goldPin)"/>
-    <text x="32" y="222" fill="#94a3b8" font-size="11" font-weight="bold">GND</text>
+    <!-- GPIO 19 BUZZER -->
+    <rect x="185" y="196" width="16" height="12" fill="#fbbf24"/>
+    <text x="193" y="222" fill="#c084fc" font-size="10" font-weight="bold" text-anchor="middle">G19</text>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 2. SENSOR ULTRASÓNICO HC-SR04 (SUPERIOR)   -->
-  <!-- ========================================== -->
-  <g transform="translate(620, 100)" filter="url(#shadow)">
-    <!-- PCB Azul -->
-    <rect x="0" y="0" width="260" height="110" rx="8" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
-    <text x="130" y="25" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">SENSOR HC-SR04</text>
+  <!-- ============================================================== -->
+  <!-- 3. SENSOR HC-SR04 (ESTILO FRITZING CON DOS "OJOS" METÁLICOS)   -->
+  <!-- ============================================================== -->
+  <g transform="translate(540, 140)" filter="url(#fshadow)">
+    <!-- PCB Azul Clásico HC-SR04 -->
+    <rect x="0" y="0" width="220" height="95" rx="8" fill="#1e40af" stroke="#60a5fa" stroke-width="2"/>
+    <text x="110" y="20" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">HC-SR04 ULTRASONIC</text>
 
-    <!-- Cápsulas transductoras T y R -->
-    <circle cx="65" cy="65" r="32" fill="#64748b" stroke="#cbd5e1" stroke-width="3"/>
-    <circle cx="65" cy="65" r="22" fill="#334155"/>
-    <text x="65" y="70" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle">T</text>
+    <!-- Ojo Transmisor (T) -->
+    <circle cx="55" cy="55" r="30" fill="url(#transducerGrad)" stroke="#cbd5e1" stroke-width="2.5"/>
+    <circle cx="55" cy="55" r="14" fill="#475569" stroke="#334155"/>
+    <text x="55" y="59" fill="#e2e8f0" font-size="11" font-weight="bold" text-anchor="middle">T</text>
 
-    <circle cx="195" cy="65" r="32" fill="#64748b" stroke="#cbd5e1" stroke-width="3"/>
-    <circle cx="195" cy="65" r="22" fill="#334155"/>
-    <text x="195" y="70" fill="#94a3b8" font-size="12" font-weight="bold" text-anchor="middle">R</text>
+    <!-- Ojo Receptor (R) -->
+    <circle cx="165" cy="55" r="30" fill="url(#transducerGrad)" stroke="#cbd5e1" stroke-width="2.5"/>
+    <circle cx="165" cy="55" r="14" fill="#475569" stroke="#334155"/>
+    <text x="165" y="59" fill="#e2e8f0" font-size="11" font-weight="bold" text-anchor="middle">R</text>
 
-    <!-- Pines de conexión inferiores -->
-    <g transform="translate(85, 105)">
-      <!-- VCC -->
-      <rect x="0" y="0" width="12" height="20" fill="url(#goldPin)"/>
-      <text x="6" y="32" fill="#f87171" font-size="10" font-weight="bold" text-anchor="middle">VCC</text>
+    <!-- 4 Pines Inferiores Insertados en la Protoboard -->
+    <!-- VCC (Pin 1) -->
+    <rect x="70" y="95" width="10" height="22" fill="#fbbf24"/>
+    <text x="75" y="128" fill="#ef4444" font-size="9" font-weight="bold" text-anchor="middle">VCC</text>
 
-      <!-- TRIG -->
-      <rect x="25" y="0" width="12" height="20" fill="url(#goldPin)"/>
-      <text x="31" y="32" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">TRIG</text>
+    <!-- TRIG (Pin 2) -->
+    <rect x="95" y="95" width="10" height="22" fill="#fbbf24"/>
+    <text x="100" y="128" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">TRIG</text>
 
-      <!-- ECHO -->
-      <rect x="50" y="0" width="12" height="20" fill="url(#goldPin)"/>
-      <text x="56" y="32" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle">ECHO</text>
+    <!-- ECHO (Pin 3) -->
+    <rect x="120" y="95" width="10" height="22" fill="#fbbf24"/>
+    <text x="125" y="128" fill="#eab308" font-size="9" font-weight="bold" text-anchor="middle">ECHO</text>
 
-      <!-- GND -->
-      <rect x="75" y="0" width="12" height="20" fill="url(#goldPin)"/>
-      <text x="81" y="32" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle">GND</text>
-    </g>
+    <!-- GND (Pin 4) -->
+    <rect x="145" y="95" width="10" height="22" fill="#fbbf24"/>
+    <text x="150" y="128" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">GND</text>
   </g>
 
-  <!-- ========================================== -->
-  <!-- 3. PANTALLA OLED SSD1306 (CENTRAL DERECHA) -->
-  <!-- ========================================== -->
-  <g transform="translate(640, 270)" filter="url(#shadow)">
+  <!-- ============================================================== -->
+  <!-- 4. PANTALLA OLED SSD1306 (INSERTADA EN PROTOBOARD)            -->
+  <!-- ============================================================== -->
+  <g transform="translate(800, 160)" filter="url(#fshadow)">
     <!-- PCB Azul OLED -->
-    <rect x="0" y="0" width="220" height="150" rx="8" fill="#0f172a" stroke="#0284c7" stroke-width="2"/>
+    <rect x="0" y="0" width="180" height="130" rx="8" fill="#1e3a8a" stroke="#38bdf8" stroke-width="2"/>
     <!-- Cristal Pantalla -->
-    <rect x="25" y="35" width="170" height="95" rx="4" fill="#020617" stroke="#1e293b" stroke-width="1.5"/>
-    <text x="110" y="75" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">OLED 128x64</text>
-    <text x="110" y="95" fill="#4ade80" font-size="11" text-anchor="middle">Dist: 25.4 cm [|||| ]</text>
+    <rect x="15" y="35" width="150" height="80" rx="4" fill="url(#oledGlass)" stroke="#334155" stroke-width="1.5"/>
+    <text x="90" y="70" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">OLED 0.96"</text>
+    <text x="90" y="90" fill="#4ade80" font-size="11" text-anchor="middle">I2C: 0x3C</text>
 
-    <!-- Pines superiores OLED -->
-    <g transform="translate(45, 0)">
-      <!-- GND -->
-      <rect x="0" y="-15" width="15" height="15" fill="url(#goldPin)"/>
-      <text x="7" y="-20" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle">GND</text>
+    <!-- 4 Pines Superiores -->
+    <!-- GND -->
+    <rect x="35" y="-15" width="12" height="16" fill="#fbbf24"/>
+    <text x="41" y="-20" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">GND</text>
 
-      <!-- VCC -->
-      <rect x="35" y="-15" width="15" height="15" fill="url(#goldPin)"/>
-      <text x="42" y="-20" fill="#f87171" font-size="10" font-weight="bold" text-anchor="middle">VCC</text>
+    <!-- VCC -->
+    <rect x="65" y="-15" width="12" height="16" fill="#fbbf24"/>
+    <text x="71" y="-20" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">VCC</text>
 
-      <!-- SCL -->
-      <rect x="70" y="-15" width="15" height="15" fill="url(#goldPin)"/>
-      <text x="77" y="-20" fill="#fb923c" font-size="10" font-weight="bold" text-anchor="middle">SCL</text>
+    <!-- SCL -->
+    <rect x="95" y="-15" width="12" height="16" fill="#fbbf24"/>
+    <text x="101" y="-20" fill="#fb923c" font-size="9" font-weight="bold" text-anchor="middle">SCL</text>
 
-      <!-- SDA -->
-      <rect x="105" y="-15" width="15" height="15" fill="url(#goldPin)"/>
-      <text x="112" y="-20" fill="#4ade80" font-size="10" font-weight="bold" text-anchor="middle">SDA</text>
+    <!-- SDA -->
+    <rect x="125" y="-15" width="12" height="16" fill="#fbbf24"/>
+    <text x="131" y="-20" fill="#4ade80" font-size="9" font-weight="bold" text-anchor="middle">SDA</text>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 5. BUZZER PIEZOELÉCTRICO (CILINDRO NEGRO FRITZING)            -->
+  <!-- ============================================================== -->
+  <g transform="translate(860, 370)" filter="url(#fshadow)">
+    <circle cx="50" cy="50" r="45" fill="#18181b" stroke="#3f3f46" stroke-width="3"/>
+    <circle cx="50" cy="50" r="15" fill="#09090b" stroke="#27272a"/>
+    <text x="50" y="78" fill="#a1a1aa" font-size="10" font-weight="bold" text-anchor="middle">BUZZER</text>
+    <text x="25" y="32" fill="#ef4444" font-size="14" font-weight="bold">+</text>
+
+    <!-- Pines saliendo hacia agujeros de la proto -->
+    <circle cx="30" cy="98" r="4" fill="#fbbf24"/>
+    <circle cx="70" cy="98" r="4" fill="#fbbf24"/>
+    <text x="28" y="115" fill="#c084fc" font-size="9" font-weight="bold" text-anchor="middle">(+) G19</text>
+    <text x="70" y="115" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">(-) GND</text>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 6. RESISTENCIAS DEL DIVISOR (R1 1kΩ y R2 2kΩ)                  -->
+  <!-- ============================================================== -->
+  <!-- R1 (1kΩ: Marrón-Negro-Rojo-Oro) en serie de ECHO a GPIO 18 -->
+  <g transform="translate(640, 310)" filter="url(#fshadow)">
+    <!-- Patilla izquierda -->
+    <line x1="0" y1="20" x2="20" y2="20" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Cuerpo de la resistencia -->
+    <rect x="20" y="12" width="50" height="16" rx="4" fill="url(#resistorBody)" stroke="#a16207" stroke-width="1"/>
+    <!-- Franjas de color: Marrón, Negro, Rojo, Dorado -->
+    <rect x="28" y="12" width="5" height="16" fill="#78350f"/>
+    <rect x="38" y="12" width="5" height="16" fill="#09090b"/>
+    <rect x="48" y="12" width="5" height="16" fill="#dc2626"/>
+    <rect x="60" y="12" width="4" height="16" fill="#eab308"/>
+    <!-- Patilla derecha -->
+    <line x1="70" y1="20" x2="90" y2="20" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="45" y="3" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle">R1: 1 kΩ</text>
+  </g>
+
+  <!-- R2 (2kΩ: Rojo-Negro-Rojo-Oro) de GPIO 18 a Masa (GND) -->
+  <g transform="translate(640, 360)" filter="url(#fshadow)">
+    <!-- Patilla izquierda -->
+    <line x1="0" y1="20" x2="20" y2="20" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Cuerpo -->
+    <rect x="20" y="12" width="50" height="16" rx="4" fill="url(#resistorBody)" stroke="#a16207" stroke-width="1"/>
+    <!-- Franjas de color: Rojo, Negro, Rojo, Dorado -->
+    <rect x="28" y="12" width="5" height="16" fill="#dc2626"/>
+    <rect x="38" y="12" width="5" height="16" fill="#09090b"/>
+    <rect x="48" y="12" width="5" height="16" fill="#dc2626"/>
+    <rect x="60" y="12" width="4" height="16" fill="#eab308"/>
+    <!-- Patilla derecha -->
+    <line x1="70" y1="20" x2="90" y2="20" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="45" y="3" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle">R2: 2 kΩ</text>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 7. CABLES DE PUENTE CURVOS (ESTILO JUMPER WIRES DE FRITZING)    -->
+  <!-- ============================================================== -->
+  <g filter="url(#wireShadow)">
+    <!-- CABLE ROJO (+5V): ESP32 VIN (368, 440) -> Bus (+) Inferior (368, 540) -->
+    <path d="M 368 440 C 368 490, 368 510, 368 540" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="368" cy="440" r="5" fill="#b91c1c"/>
+    <circle cx="368" cy="540" r="5" fill="#b91c1c"/>
+
+    <!-- CABLE ROJO (+5V): Bus (+) Inferior (615, 540) -> HC-SR04 VCC (615, 240) -->
+    <path d="M 615 540 C 580 500, 580 290, 615 240" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="615" cy="540" r="5" fill="#b91c1c"/>
+    <circle cx="615" cy="240" r="5" fill="#b91c1c"/>
+
+    <!-- CABLE AZUL (TRIG): ESP32 G5 (423, 440) -> HC-SR04 TRIG (640, 240) -->
+    <path d="M 423 440 C 423 480, 530 480, 640 240" fill="none" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="423" cy="440" r="5" fill="#0284c7"/>
+    <circle cx="640" cy="240" r="5" fill="#0284c7"/>
+
+    <!-- CABLE AMARILLO (ECHO 5V): HC-SR04 ECHO (665, 240) -> Entrada R1 (640, 330) -->
+    <path d="M 665 240 C 665 280, 630 300, 640 330" fill="none" stroke="#eab308" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="665" cy="240" r="5" fill="#ca8a04"/>
+    <circle cx="640" cy="330" r="5" fill="#ca8a04"/>
+
+    <!-- CABLE AMARILLO (ECHO 3.3V seguro): Nodo común R1-R2 (730, 330) -> ESP32 G18 (453, 440) -->
+    <path d="M 730 330 C 760 360, 560 480, 453 440" fill="none" stroke="#eab308" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="730" cy="330" r="5" fill="#ca8a04"/>
+    <circle cx="453" cy="440" r="5" fill="#ca8a04"/>
+
+    <!-- PUENTE ENTRE R1 Y R2 -->
+    <path d="M 730 330 L 730 380" fill="none" stroke="#cbd5e1" stroke-width="3.5" stroke-linecap="round"/>
+
+    <!-- CABLE NEGRO (GND R2): R2 Salida (640, 380) -> Bus (-) Inferior (640, 510) -->
+    <path d="M 640 380 C 630 430, 640 470, 640 510" fill="none" stroke="#334155" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="640" cy="380" r="5" fill="#0f172a"/>
+    <circle cx="640" cy="510" r="5" fill="#0f172a"/>
+
+    <!-- CABLE MORADO (BUZZER): ESP32 G19 (328, 440) -> Buzzer (+) (890, 470) -->
+    <path d="M 328 440 C 328 530, 850 540, 890 470" fill="none" stroke="#c084fc" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="328" cy="440" r="5" fill="#7e22ce"/>
+    <circle cx="890" cy="470" r="5" fill="#7e22ce"/>
+
+    <!-- CABLE NEGRO (BUZZER GND): Buzzer (-) (930, 470) -> Bus (-) Inferior (930, 510) -->
+    <path d="M 930 470 L 930 510" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="930" cy="470" r="5" fill="#0f172a"/>
+    <circle cx="930" cy="510" r="5" fill="#0f172a"/>
+
+    <!-- CABLE ROSA (3.3V OLED): ESP32 3V3 (368, 235) -> OLED VCC (871, 145) -->
+    <path d="M 368 235 C 368 130, 830 110, 871 145" fill="none" stroke="#f43f5e" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="368" cy="235" r="5" fill="#be123c"/>
+    <circle cx="871" cy="145" r="5" fill="#be123c"/>
+
+    <!-- CABLE VERDE (I2C SDA): ESP32 G21 (453, 235) -> OLED SDA (931, 145) -->
+    <path d="M 453 235 C 470 120, 920 100, 931 145" fill="none" stroke="#22c55e" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="453" cy="235" r="5" fill="#15803d"/>
+    <circle cx="931" cy="145" r="5" fill="#15803d"/>
+
+    <!-- CABLE NARANJA (I2C SCL): ESP32 G22 (423, 235) -> OLED SCL (901, 145) -->
+    <path d="M 423 235 C 440 140, 890 120, 901 145" fill="none" stroke="#f97316" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="423" cy="235" r="5" fill="#c2410c"/>
+    <circle cx="901" cy="145" r="5" fill="#c2410c"/>
+
+    <!-- CABLE NEGRO (OLED GND): OLED GND (841, 145) -> Bus (-) Superior (841, 145 -> rail) -->
+    <path d="M 841 145 C 841 125, 780 125, 780 145" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="841" cy="145" r="5" fill="#0f172a"/>
+
+    <!-- CABLE NEGRO DE MASA GENERAL: ESP32 GND (393, 440) -> Bus (-) Inferior (393, 510) -->
+    <path d="M 393 440 L 393 510" fill="none" stroke="#334155" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="393" cy="440" r="5" fill="#0f172a"/>
+    <circle cx="393" cy="510" r="5" fill="#0f172a"/>
+
+    <!-- CABLE NEGRO DE MASA HC-SR04: HC-SR04 GND (690, 240) -> Bus (-) Inferior (690, 510) -->
+    <path d="M 690 240 C 690 320, 690 450, 690 510" fill="none" stroke="#334155" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="690" cy="240" r="5" fill="#0f172a"/>
+    <circle cx="690" cy="510" r="5" fill="#0f172a"/>
+  </g>
+
+  <!-- ============================================================== -->
+  <!-- 8. LEYENDA Y GUÍA RÁPIDA INFERIOR (CÓDIGO DE COLORES)           -->
+  <!-- ============================================================== -->
+  <g transform="translate(60, 595)">
+    <rect x="0" y="0" width="1080" height="195" rx="12" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+    <text x="30" y="32" fill="#38bdf8" font-size="16" font-weight="bold">CÓDIGO DE COLORES DE LOS CABLES (GUÍA DEL TALLER)</text>
+
+    <!-- Columna 1 -->
+    <g transform="translate(30, 55)">
+      <circle cx="10" cy="10" r="7" fill="#ef4444"/>
+      <text x="28" y="14" fill="#f8fafc" font-size="13"><strong>Rojo:</strong> Alimentación 5V (ESP32 VIN ➔ HC-SR04 VCC)</text>
+
+      <circle cx="10" cy="38" r="7" fill="#f43f5e"/>
+      <text x="28" y="42" fill="#f8fafc" font-size="13"><strong>Rosa:</strong> Alimentación 3.3V (ESP32 3V3 ➔ OLED VCC)</text>
+
+      <circle cx="10" cy="66" r="7" fill="#334155" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="28" y="70" fill="#f8fafc" font-size="13"><strong>Gris/Negro:</strong> Masa Común GND (Unir todas a carril azul)</text>
+    </g>
+
+    <!-- Columna 2 -->
+    <g transform="translate(560, 55)">
+      <circle cx="10" cy="10" r="7" fill="#38bdf8"/>
+      <text x="28" y="14" fill="#f8fafc" font-size="13"><strong>Azul:</strong> Disparo Trigger (ESP32 GPIO 5 ➔ HC-SR04 TRIG)</text>
+
+      <circle cx="10" cy="38" r="7" fill="#eab308"/>
+      <text x="28" y="42" fill="#f8fafc" font-size="13"><strong>Amarillo:</strong> Retorno Echo (ECHO ➔ R1/R2 ➔ ESP32 GPIO 18)</text>
+
+      <circle cx="10" cy="66" r="7" fill="#c084fc"/>
+      <text x="28" y="70" fill="#f8fafc" font-size="13"><strong>Morado:</strong> Avisador Acústico (ESP32 GPIO 19 ➔ Buzzer +)</text>
+    </g>
+
+    <!-- Fila inferior: Bus I2C y Nota del Divisor -->
+    <g transform="translate(30, 150)">
+      <circle cx="10" cy="10" r="7" fill="#22c55e"/>
+      <text x="28" y="14" fill="#f8fafc" font-size="13"><strong>Verde (SDA):</strong> Datos Pantalla ➔ GPIO 21</text>
+
+      <circle cx="280" cy="10" r="7" fill="#f97316"/>
+      <text x="298" y="14" fill="#f8fafc" font-size="13"><strong>Naranja (SCL):</strong> Reloj Pantalla ➔ GPIO 22</text>
+
+      <text x="560" y="14" fill="#fbbf24" font-size="12" font-style="italic">⚠️ Recuerda colocar R1 (1kΩ) en serie y R2 (2kΩ) a masa para proteger el pin ECHO.</text>
     </g>
   </g>
-
-  <!-- ========================================== -->
-  <!-- 4. BUZZER PIEZOELÉCTRICO (INFERIOR DERECHA)-->
-  <!-- ========================================== -->
-  <g transform="translate(690, 480)" filter="url(#shadow)">
-    <!-- Cilindro Negro Buzzer -->
-    <circle cx="60" cy="60" r="50" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
-    <circle cx="60" cy="60" r="16" fill="#09090b"/>
-    <text x="60" y="95" fill="#a1a1aa" font-size="11" font-weight="bold" text-anchor="middle">BUZZER</text>
-
-    <!-- Terminales -->
-    <circle cx="40" cy="120" r="6" fill="#cbd5e1"/>
-    <text x="40" y="140" fill="#c084fc" font-size="11" font-weight="bold" text-anchor="middle">(+) GPIO 19</text>
-
-    <circle cx="80" cy="120" r="6" fill="#cbd5e1"/>
-    <text x="80" y="140" fill="#94a3b8" font-size="11" font-weight="bold" text-anchor="middle">(-) GND</text>
-  </g>
-
-  <!-- ========================================== -->
-  <!-- 5. CAJA DEL DIVISOR RESISTIVO (CENTRO)     -->
-  <!-- ========================================== -->
-  <g transform="translate(370, 240)" filter="url(#shadow)">
-    <rect x="0" y="0" width="190" height="110" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4"/>
-    <text x="95" y="22" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle">DIVISOR RESISTIVO (5V ➔ 3.3V)</text>
-
-    <!-- Resistencia R1 (1k) -->
-    <rect x="25" y="40" width="55" height="18" rx="4" fill="#d97706"/>
-    <text x="52" y="53" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">R1: 1kΩ</text>
-
-    <!-- Resistencia R2 (2k) -->
-    <rect x="110" y="40" width="55" height="18" rx="4" fill="#b45309"/>
-    <text x="137" y="53" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">R2: 2kΩ</text>
-
-    <text x="95" y="80" fill="#94a3b8" font-size="9" text-anchor="middle">ECHO ➔ R1 ➔ GPIO 18</text>
-    <text x="95" y="98" fill="#94a3b8" font-size="9" text-anchor="middle">GPIO 18 ➔ R2 ➔ GND</text>
-  </g>
-
-  <!-- ========================================== -->
-  <!-- CABLES Y CONEXIONES (RUTAS SVG)            -->
-  <!-- ========================================== -->
-  <!-- 1. VCC 5V: ESP32 VIN (280, 297) -> HC-SR04 VCC (711, 215) -->
-  <path d="M 280 297 L 340 297 L 340 180 L 711 180 L 711 205" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
-
-  <!-- 2. TRIG: ESP32 GPIO 5 (280, 417) -> HC-SR04 TRIG (736, 215) -->
-  <path d="M 280 417 L 330 417 L 330 200 L 736 200 L 736 205" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
-
-  <!-- 3. ECHO: HC-SR04 ECHO (761, 215) -> Divisor R1 Entrada (395, 290) -->
-  <path d="M 761 205 L 761 225 L 395 225 L 395 280" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
-  <!-- Divisor Salida R1/R2 (450, 290) -> ESP32 GPIO 18 (280, 387) -->
-  <path d="M 450 280 L 450 387 L 280 387" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
-
-  <!-- 4. VCC 3.3V OLED: ESP32 3V3 (60, 297) -> OLED VCC (722, 255) -->
-  <path d="M 60 297 L 30 297 L 30 650 L 610 650 L 610 240 L 722 240 L 722 255" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round"/>
-
-  <!-- 5. I2C SDA: ESP32 GPIO 21 (280, 507) -> OLED SDA (792, 255) -->
-  <path d="M 280 507 L 620 507 L 620 260 L 792 260 L 792 255" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round"/>
-
-  <!-- 6. I2C SCL: ESP32 GPIO 22 (280, 537) -> OLED SCL (757, 255) -->
-  <path d="M 280 537 L 600 537 L 600 245 L 757 245 L 757 255" fill="none" stroke="#fb923c" stroke-width="3" stroke-linecap="round"/>
-
-  <!-- 7. BUZZER (+): ESP32 GPIO 19 (280, 457) -> Buzzer (+) (730, 600) -->
-  <path d="M 280 457 L 580 457 L 580 600 L 730 600" fill="none" stroke="#c084fc" stroke-width="3" stroke-linecap="round"/>
-
-  <!-- 8. LÍNEAS DE MASA COMÚN (GND - NEGRO/GRIS) -->
-  <!-- ESP32 GND (280, 327) hacia Buzzer (-), OLED GND, Divisor R2 GND y HC-SR04 GND -->
-  <path d="M 280 327 L 360 327 L 360 670 L 890 670" fill="none" stroke="#94a3b8" stroke-width="3" stroke-dasharray="6,4" stroke-linecap="round"/>
-  <!-- Derivación GND a HC-SR04 -->
-  <path d="M 786 205 L 786 215 L 890 215 L 890 670" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6,4"/>
-  <!-- Derivación GND a OLED -->
-  <path d="M 687 255 L 687 235 L 870 235 L 870 670" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6,4"/>
-  <!-- Derivación GND a Buzzer (-) -->
-  <path d="M 770 600 L 770 670" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6,4"/>
-  <!-- Derivación GND a Divisor R2 -->
-  <path d="M 505 298 L 505 327" fill="none" stroke="#94a3b8" stroke-width="2.5" stroke-dasharray="6,4"/>
 </svg>
