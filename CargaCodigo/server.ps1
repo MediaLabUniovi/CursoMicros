@@ -1,17 +1,40 @@
-$port = 8000
-$listener = New-Object System.Net.HttpListener
-$prefix = "http://localhost:$port/"
-$listener.Prefixes.Add($prefix)
+$ports = 8000..8015
+$listener = $null
+$boundPort = $null
 
-try {
-    $listener.Start()
-} catch {
-    Write-Host "Error iniciando listener en $prefix : $_"
+foreach ($p in $ports) {
+    try {
+        $tempListener = New-Object System.Net.HttpListener
+        $prefix = "http://localhost:$p/"
+        $tempListener.Prefixes.Add($prefix)
+        $tempListener.Start()
+        $listener = $tempListener
+        $boundPort = $p
+        break
+    } catch {
+        if ($tempListener) {
+            $tempListener.Close()
+        }
+    }
+}
+
+if ($null -eq $listener) {
+    Write-Host "ERROR: No se encontró ningún puerto disponible entre 8000 y 8015." -ForegroundColor Red
     exit 1
 }
 
-Write-Host "Servidor web HTTP local activo en $prefix"
-Write-Host "Presiona Ctrl+C en esta consola para detenerlo.`n"
+$url = "http://localhost:$boundPort/"
+Write-Host "=======================================================" -ForegroundColor Cyan
+Write-Host "   MediaLab UniOvi - Cargador Web ESP32 (Puerto $boundPort)" -ForegroundColor Cyan
+Write-Host "=======================================================" -ForegroundColor Cyan
+Write-Host "`n[OK] Servidor activo en: $url" -ForegroundColor Green
+Write-Host "[OK] Abriendo navegador web automaticamente..." -ForegroundColor Yellow
+
+# Abrir el navegador en el puerto exacto seleccionado
+Start-Process $url
+
+Write-Host "`n>>> Por favor, NO cierres esta ventana hasta terminar de flashear el ESP32. <<<" -ForegroundColor White
+Write-Host "Para detener el servidor cuando termines, pulsa Ctrl+C o cierra esta ventana.`n"
 
 $mimeTypes = @{
     ".html" = "text/html; charset=utf-8"
@@ -53,6 +76,6 @@ while ($listener.IsListening) {
         }
         $response.Close()
     } catch {
-        # Conexión cerrada o error de lectura no fatal
+        # Conexión cerrada o interrupción no crítica
     }
 }
