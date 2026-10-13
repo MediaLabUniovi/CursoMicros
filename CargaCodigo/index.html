@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cargador de Firmware ESP32 | MediaLab UniOvi</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-glow: rgba(2, 132, 199, 0.35);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --terminal-bg: #030712;
+      --terminal-border: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(99, 102, 241, 0.15));
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .badge {
+      display: inline-block;
+      background: #0369a1;
+      color: #e0f2fe;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 1.15rem 2rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    .btn-action:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px var(--primary-glow);
+      background: linear-gradient(135deg, #0369a1, #1d4ed8);
+    }
+
+    .btn-action:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .steps-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0.6rem 0.25rem;
+      border-radius: 0.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .step-item.active {
+      color: #38bdf8;
+      border-color: #0284c7;
+      background: rgba(2, 132, 199, 0.1);
+      font-weight: 600;
+    }
+
+    .step-item.completed {
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .step-number {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+
+    .progress-box {
+      margin-top: 1.25rem;
+      display: none;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 12px;
+      background: #0f172a;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8, #10b981);
+      border-radius: 999px;
+      transition: width 0.15s ease-out;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--success);
+      color: #a7f3d0;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger);
+      color: #fca5a5;
+    }
+
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--warning);
+      color: #fde68a;
+    }
+
+    .terminal-container {
+      background: var(--terminal-bg);
+      border: 1px solid var(--terminal-border);
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: #111827;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--terminal-border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .terminal-btn {
+      background: transparent;
+      border: 1px solid #374151;
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .terminal-btn:hover {
+      background: #1f2937;
+      color: var(--text);
+    }
+
+    .terminal-body {
+      padding: 1rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.82rem;
+      height: 220px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .terminal-body .log-info { color: #38bdf8; }
+    .terminal-body .log-success { color: #4ade80; font-weight: bold; }
+    .terminal-body .log-warn { color: #fbbf24; }
+    .terminal-body .log-error { color: #f87171; font-weight: bold; }
+
+    .pinout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    .pinout-card {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 0.5rem;
+      padding: 0.85rem;
+    }
+
+    .pinout-card h4 {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      color: #38bdf8;
+    }
+
+    .pinout-list {
+      list-style: none;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .pinout-list code {
+      background: #1e293b;
+      color: #f1f5f9;
+      padding: 0.15rem 0.35rem;
+      border-radius: 3px;
+      font-size: 0.78rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: auto;
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">MediaLab UniOvi • Taller de Microcontroladores</span>
+      <h1>Sensor de Aparcamiento (ESP32)</h1>
+      <p class="subtitle">Herramienta web autónoma para cargar el firmware oficial en un solo clic a través de Web Serial API.</p>
+    </header>
+
+    <div id="unsupportedAlert" class="alert alert-warning">
+      ⚠️ <strong>Navegador no compatible:</strong> Tu navegador actual no soporta la API Web Serial. Por favor, abre esta página en <strong>Google Chrome</strong>, <strong>Microsoft Edge</strong> u <strong>Opera</strong> (versiones de escritorio).
+    </div>
+
+    <div class="card">
+      <button id="btnFlash" class="btn-action">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        Conectar y Cargar Código
+      </button>
+
+      <div class="steps-nav">
+        <div id="step1" class="step-item active">
+          <span class="step-number">1</span>
+          <span>Puerto Serie</span>
+        </div>
+        <div id="step2" class="step-item">
+          <span class="step-number">2</span>
+          <span>Detección ESP32</span>
+        </div>
+        <div id="step3" class="step-item">
+          <span class="step-number">3</span>
+          <span>Flasheo Binarios</span>
+        </div>
+        <div id="step4" class="step-item">
+          <span class="step-number">4</span>
+          <span>Reinicio Listo</span>
+        </div>
+      </div>
+
+      <div id="progressBox" class="progress-box">
+        <div class="progress-header">
+          <span id="progressLabel">Preparando grabación...</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="progressBar" class="progress-bar-fill"></div>
+        </div>
+      </div>
+
+      <div id="successAlert" class="alert alert-success">
+        🎉 <strong>¡Código cargado correctamente!</strong> El microcontrolador ESP32 se ha reiniciado y el sensor de parking está funcionando. Observa la pantalla OLED y comprueba el sensor ultrasónico y el buzzer.
+      </div>
+
+      <div id="errorAlert" class="alert alert-error">
+        ❌ <strong>Error durante el proceso:</strong> <span id="errorMessage"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="terminal-container">
+        <div class="terminal-header">
+          <span>Consola de Flasheo (esptool-js)</span>
+          <div class="terminal-controls">
+            <button id="btnClear" class="terminal-btn">Limpiar</button>
+          </div>
+        </div>
+        <div id="terminal" class="terminal-body">Esperando inicio... Conecta tu ESP32 por USB y pulsa "Conectar y Cargar Código".
+</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #f1f5f9;">📌 Resumen de Conexiones Hardware</h3>
+      <div class="pinout-grid">
+        <div class="pinout-card">
+          <h4>Sensor HC-SR04</h4>
+          <ul class="pinout-list">
+            <li><code>TRIG</code> ➔ <strong>GPIO 5</strong></li>
+            <li><code>ECHO</code> ➔ <strong>GPIO 18</strong> (divisor 1k/2k)</li>
+            <li><code>VCC</code> ➔ <strong>VIN (5V)</strong> | <code>GND</code> ➔ <strong>GND</strong></li>
+          </ul>
+        </div>
+        <div class="pinout-card">
+          <h4>Buzzer Pasivo/Activo</h4>
+          <ul class="pinout-list">
+            <li><code>Ánodo (+)</code> ➔ <strong>GPIO 19</strong></li>
+            <li><code>Cátodo (-)</code> ➔ <strong>GND</strong></li>
+          </ul>
+        </div>
+        <div class="pinout-card">
+          <h4>Pantalla OLED I2C (128x64)</h4>
+          <ul class="pinout-list">
+            <li><code>SDA</code> ➔ <strong>GPIO 21</strong></li>
+            <li><code>SCL</code> ➔ <strong>GPIO 22</strong></li>
+            <li><code>VCC</code> ➔ <strong>3.3V / 5V</strong> | <code>GND</code> ➔ <strong>GND</strong></li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.75rem;">
+        💡 <em>Consejo:</em> Si el cargador muestra "Failed to connect", mantén pulsado el botón <strong>BOOT</strong> de tu ESP32 al pulsar "Conectar" hasta que empiece la detección.
+      </p>
+    </div>
+
+    <footer>
+      MediaLab UniOvi • Universidad de Oviedo • Laboratorio de Fabricación y Prototipado
+    </footer>
+  </div>
+
+  <script type="module">
+    let esptoolMod = null;
+    try {
+      esptoolMod = await import('./esptool-bundle.js');
+    } catch (e) {
+      console.warn('Carga local de esptool falló, probando CDN unpkg...', e);
+      try {
+        esptoolMod = await import('https://unpkg.com/esptool-js@0.7.0/bundle.js');
+      } catch (errCdn) {
+        console.error('Error cargando módulo esptool:', errCdn);
+      }
+    }
+
+    const { ESPLoader, Transport } = esptoolMod || {};
+
+    const btnFlash = document.getElementById('btnFlash');
+    const btnClear = document.getElementById('btnClear');
+    const terminalEl = document.getElementById('terminal');
+    const progressBox = document.getElementById('progressBox');
+    const progressBar = document.getElementById('progressBar');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressPercent = document.getElementById('progressPercent');
+    const successAlert = document.getElementById('successAlert');
+    const errorAlert = document.getElementById('errorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+    const unsupportedAlert = document.getElementById('unsupportedAlert');
+
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const step4 = document.getElementById('step4');
+
+    if (!('serial' in navigator)) {
+      unsupportedAlert.style.display = 'block';
+      btnFlash.disabled = true;
+    }
+
+    function log(text, type = 'info') {
+      const line = document.createElement('div');
+      if (type === 'error') line.className = 'log-error';
+      else if (type === 'success') line.className = 'log-success';
+      else if (type === 'warn') line.className = 'log-warn';
+      else line.className = 'log-info';
+
+      const time = new Date().toLocaleTimeString();
+      line.textContent = `[${time}] ${text}`;
+      terminalEl.appendChild(line);
+      terminalEl.scrollTop = terminalEl.scrollHeight;
+    }
+
+    btnClear.addEventListener('click', () => {
+      terminalEl.innerHTML = '';
+    });
+
+    function setStep(step) {
+      const steps = [step1, step2, step3, step4];
+      steps.forEach((s, idx) => {
+        s.classList.remove('active', 'completed');
+        if (idx + 1 < step) s.classList.add('completed');
+        else if (idx + 1 === step) s.classList.add('active');
+      });
+    }
+
+    function updateProgress(percent, labelText) {
+      progressBox.style.display = 'block';
+      progressBar.style.width = `${percent}%`;
+      progressPercent.textContent = `${percent}%`;
+      if (labelText) progressLabel.textContent = labelText;
+    }
+
+    async function fetchBinary(path) {
+      log(`Descargando binario ${path}...`);
+      const resp = await fetch(path);
+      if (!resp.ok) {
+        throw new Error(`No se pudo obtener ${path} (HTTP ${resp.status})`);
+      }
+      const buffer = await resp.arrayBuffer();
+      return new Uint8Array(buffer);
+    }
+
+    btnFlash.addEventListener('click', async () => {
+      if (!ESPLoader || !Transport) {
+        alert('Error: Librería esptool-js no disponible. Revisa la consola del navegador.');
+        return;
+      }
+
+      successAlert.style.display = 'none';
+      errorAlert.style.display = 'none';
+      btnFlash.disabled = true;
+      setStep(1);
+
+      let port = null;
+      let transport = null;
+      let esploader = null;
+
+      try {
+        log('Solicitando acceso a puerto serie Web Serial...', 'info');
+        port = await navigator.serial.requestPort();
+        log('Puerto seleccionado correctamente.', 'success');
+
+        setStep(2);
+        updateProgress(5, 'Conectando con ESP32...');
+
+        transport = new Transport(port);
+        esploader = new ESPLoader({
+          transport: transport,
+          baudrate: 460800,
+          romBaudrate: 115200,
+          terminal: {
+            clean() {},
+            writeLine(str) { log(str); },
+            write(str) { log(str); }
+          }
+        });
+
+        log('Sincronizando con el chip ESP32...', 'info');
+        await esploader.main();
+        log(`Chip detectado con éxito: ${esploader.chip.CHIP_NAME}`, 'success');
+
+        setStep(3);
+        updateProgress(15, 'Cargando binarios en memoria...');
+
+        const [bootloaderBin, partitionsBin, bootApp0Bin, firmwareBin] = await Promise.all([
+          fetchBinary('bootloader.bin'),
+          fetchBinary('partitions.bin'),
+          fetchBinary('boot_app0.bin'),
+          fetchBinary('firmware.bin')
+        ]);
+
+        const fileArray = [
+          { data: bootloaderBin, address: 0x1000 },
+          { data: partitionsBin, address: 0x8000 },
+          { data: bootApp0Bin, address: 0xe000 },
+          { data: firmwareBin, address: 0x10000 }
+        ];
+
+        const totalBytes = fileArray.reduce((acc, f) => acc + f.data.length, 0);
+        let writtenBefore = 0;
+        let currentIdx = -1;
+
+        log(`Iniciando escritura de ${fileArray.length} bloques (${(totalBytes / 1024).toFixed(1)} KB en total)...`, 'info');
+
+        await esploader.writeFlash({
+          fileArray: fileArray,
+          flashSize: 'keep',
+          flashMode: 'keep',
+          flashFreq: 'keep',
+          eraseAll: false,
+          compress: true,
+          reportProgress: (fileIndex, written, total) => {
+            if (fileIndex !== currentIdx) {
+              if (currentIdx >= 0) {
+                writtenBefore += fileArray[currentIdx].data.length;
+              }
+              currentIdx = fileIndex;
+            }
+            const currentBytes = writtenBefore + written;
+            const pct = Math.min(100, Math.round((currentBytes / totalBytes) * 100));
+            updateProgress(pct, `Flasheando archivo ${fileIndex + 1}/${fileArray.length} (${pct}%)...`);
+          }
+        });
+
+        updateProgress(100, 'Flasheo completado. Reiniciando microcontrolador...');
+        log('¡Binarios flasheados satisfactoriamente!', 'success');
+
+        setStep(4);
+        log('Enviando señal de reinicio (Hard Reset) al ESP32...', 'info');
+        try {
+          await esploader.after('hard_reset');
+        } catch (eReset) {
+          log('Reinicio vía RTS enviado.', 'info');
+        }
+
+        try {
+          await esploader.transport.disconnect();
+        } catch (eDisc) {}
+
+        successAlert.style.display = 'block';
+        log('¡Proceso finalizado con éxito! El ESP32 está listo.', 'success');
+      } catch (err) {
+        console.error(err);
+        errorMessage.textContent = err.message || err;
+        errorAlert.style.display = 'block';
+        log(`ERROR: ${err.message || err}`, 'error');
+
+        if (transport) {
+          try { await transport.disconnect(); } catch (e) {}
+        }
+      } finally {
+        btnFlash.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
