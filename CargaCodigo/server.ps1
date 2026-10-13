@@ -1,4 +1,4 @@
-$ports = 8000..8015
+$ports = 8080..8095
 $listener = $null
 $boundPort = $null
 
@@ -19,7 +19,7 @@ foreach ($p in $ports) {
 }
 
 if ($null -eq $listener) {
-    Write-Host "ERROR: No se encontró ningún puerto disponible entre 8000 y 8015." -ForegroundColor Red
+    Write-Host "ERROR: No se encontró ningún puerto disponible entre 8080 y 8095." -ForegroundColor Red
     exit 1
 }
 
@@ -76,6 +76,6 @@ while ($listener.IsListening) {
         }
         $response.Close()
     } catch {
-        # Conexión cerrada o interrupción no crítica
+        # Conexión cerrada o interrupción
     }
 }
