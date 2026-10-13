@@ -428,9 +428,14 @@
   </div>
 
   <script type="module">
+    // Determinar la ruta base según si se ejecuta desde raíz o desde /CargaCodigo/
+    const isRoot = !window.location.pathname.includes('/CargaCodigo');
+    const binBase = isRoot ? './CargaCodigo/' : './';
+    const esptoolPath = isRoot ? './CargaCodigo/esptool-bundle.js' : './esptool-bundle.js';
+
     let esptoolMod = null;
     try {
-      esptoolMod = await import('./esptool-bundle.js');
+      esptoolMod = await import(esptoolPath);
     } catch (e) {
       console.warn('Carga local de esptool falló, probando CDN unpkg...', e);
       try {
@@ -498,10 +503,11 @@
     }
 
     async function fetchBinary(path) {
-      log(`Descargando binario ${path}...`);
-      const resp = await fetch(path);
+      const fullPath = binBase + path;
+      log(`Descargando binario ${fullPath}...`);
+      const resp = await fetch(fullPath);
       if (!resp.ok) {
-        throw new Error(`No se pudo obtener ${path} (HTTP ${resp.status})`);
+        throw new Error(`No se pudo obtener ${fullPath} (HTTP ${resp.status})`);
       }
       const buffer = await resp.arrayBuffer();
       return new Uint8Array(buffer);

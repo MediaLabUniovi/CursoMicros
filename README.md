@@ -11,6 +11,10 @@ Bienvenido al repositorio oficial del taller práctico de sistemas embebidos de 
   <code>https://github.com/MediaLabUniovi/CursoMicros</code>
 </p>
 
+<p align="center">
+  🚀 <b><a href="https://medialabuniovi.github.io/CursoMicros/">Abrir el Cargador Web Online en GitHub Pages</a></b> (¡Sin instalar nada!)
+</p>
+
 ---
 
 ## ⚡ Carga Ultrarrápida para Alumnos (3 Pasos)
